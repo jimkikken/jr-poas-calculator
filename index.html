@@ -97,9 +97,10 @@
 .jrpoas-root .jrpoas-breakdown-total td:first-child{color:#007aff!important}
 /* v1.0.4: full-width breakout — rek root uit tot viewport zodat gradient overal doorloopt, ook in Elementor-sections met witte achtergrond */
 .jrpoas-root{width:100vw!important;max-width:100vw!important;position:relative!important;left:50%!important;right:50%!important;margin-left:-50vw!important;margin-right:-50vw!important}
-/* v1.0.3: currency-symbool fix (thema kan line-through op spans zetten) */
-.jrpoas-root .jrpoas-prefix,.jrpoas-root .jrpoas-suffix{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;text-decoration:none!important;font-style:normal!important;font-weight:400!important}
-.jrpoas-root .jrpoas-input{text-decoration:none!important;font-style:normal!important}
+/* v1.0.5: currency-symbool shotgun fix — force specifiek font, kill alle text-decoration vormen en eventuele pseudo-elements van het thema */
+.jrpoas-root .jrpoas-prefix,.jrpoas-root .jrpoas-suffix{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif!important;text-decoration:none!important;text-decoration-line:none!important;text-decoration-style:solid!important;text-decoration-thickness:0!important;font-style:normal!important;font-weight:400!important;font-variant:normal!important;font-feature-settings:normal!important;text-shadow:none!important;letter-spacing:normal!important;background:transparent!important;background-image:none!important;border:0!important;padding:0!important;margin:0!important;line-height:1!important}
+.jrpoas-root .jrpoas-prefix::before,.jrpoas-root .jrpoas-prefix::after,.jrpoas-root .jrpoas-suffix::before,.jrpoas-root .jrpoas-suffix::after{content:none!important;display:none!important;background:transparent!important;border:0!important}
+.jrpoas-root .jrpoas-input{text-decoration:none!important;text-decoration-line:none!important;font-style:normal!important}
 /* v1.0.3: custom slider styling — blauwe fill tot thumb, donkergrijze rail */
 .jrpoas-root .jrpoas-range{-webkit-appearance:none!important;appearance:none!important;background:transparent!important;padding:0!important;height:20px!important;cursor:pointer!important;accent-color:#007aff!important}
 .jrpoas-root .jrpoas-range:focus{outline:0!important}
