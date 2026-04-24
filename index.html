@@ -1,0 +1,357 @@
+<!-- JR POAS Calculator v1.0.0 — zelfstandig embed. Plak dit als één blok in een
+	 Gutenberg Custom HTML-blok of Elementor HTML-widget. Alle CSS en JS zijn
+	 inline en gescoped met .jrpoas-, dus geen conflicten met je thema. -->
+
+<style>
+/* JR POAS Calculator — scoped styling */
+.jrpoas-root{box-sizing:border-box;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.4;color:#fff;background:linear-gradient(135deg,#0b1220 0%,#0b1220 55%,rgba(0,122,255,.3) 100%);padding:2.5rem 1rem;border-radius:0}
+.jrpoas-root *{box-sizing:border-box}
+.jrpoas-container{width:100%;max-width:56rem;margin:0 auto}
+.jrpoas-title{font-size:2.25rem;line-height:1.1;font-weight:700;text-align:center;margin:0 0 .5rem 0;color:#fff;background:linear-gradient(135deg,#fff 0%,#9ca3af 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+@media(min-width:768px){.jrpoas-title{font-size:3rem}}
+.jrpoas-subtitle{text-align:center;color:#9ca3af;max-width:36rem;margin:0 auto 2rem auto;font-size:.95rem}
+.jrpoas-card{background:rgba(31,41,55,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid #374151;border-radius:1rem;box-shadow:0 25px 50px -12px rgba(0,0,0,.5);padding:1.5rem}
+@media(min-width:768px){.jrpoas-card{padding:2rem}}
+.jrpoas-card>*+*{margin-top:1.5rem}
+.jrpoas-toggle-wrap{display:flex;justify-content:center}
+.jrpoas-toggle{display:inline-flex;background:rgba(17,24,39,.7);border:1px solid #374151;border-radius:.75rem;padding:.25rem;font-size:.875rem}
+.jrpoas-toggle-btn{padding:.5rem 1.25rem;border-radius:.5rem;font-weight:500;transition:background .15s,color .15s;background:transparent;border:0;color:#9ca3af;cursor:pointer;font-family:inherit;font-size:inherit}
+.jrpoas-toggle-btn:hover{color:#fff}
+.jrpoas-toggle-btn.is-active{background:#007aff;color:#fff}
+.jrpoas-toggle-btn.is-active:hover{color:#fff}
+.jrpoas-grid{display:grid;gap:1rem}
+.jrpoas-grid-1{grid-template-columns:1fr}
+.jrpoas-grid-2,.jrpoas-grid-3,.jrpoas-grid-4{grid-template-columns:1fr}
+@media(min-width:640px){.jrpoas-grid-2,.jrpoas-grid-3,.jrpoas-grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.jrpoas-grid-3{grid-template-columns:repeat(3,1fr)}.jrpoas-grid-4{grid-template-columns:repeat(4,1fr)}}
+.jrpoas-col-span-2{grid-column:span 1/span 1}
+@media(min-width:1024px){.jrpoas-col-span-2{grid-column:span 2/span 2}}
+.jrpoas-field{display:flex;flex-direction:column}
+.jrpoas-label{display:flex;align-items:center;font-size:.875rem;font-weight:500;color:#d1d5db;margin-bottom:.5rem;min-height:2.5rem;line-height:1.2}
+.jrpoas-input-wrap{position:relative}
+.jrpoas-input{width:100%;background:rgba(17,24,39,.7);border:1px solid #374151;border-radius:.5rem;padding:.5rem .75rem;color:#fff;font-size:.95rem;font-family:inherit;line-height:1.4;-moz-appearance:textfield}
+.jrpoas-input::-webkit-outer-spin-button,.jrpoas-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.jrpoas-input:focus{outline:0;border-color:#007aff;box-shadow:0 0 0 3px rgba(0,122,255,.15)}
+.jrpoas-input-prefix{padding-left:2rem}
+.jrpoas-input-suffix{padding-right:2rem}
+.jrpoas-prefix,.jrpoas-suffix{position:absolute;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:.95rem;pointer-events:none}
+.jrpoas-prefix{left:.75rem}
+.jrpoas-suffix{right:.75rem}
+.jrpoas-range-wrap{display:flex;align-items:center;gap:1rem}
+.jrpoas-range{flex:1 1 auto;height:6px;accent-color:#007aff}
+.jrpoas-range-val{font-weight:600;color:#007aff;min-width:4.5rem;text-align:center;background:rgba(55,65,81,.5);padding:.5rem 0;border-radius:.5rem;font-size:.9rem}
+.jrpoas-tip{position:relative;display:inline-flex;margin-left:.35rem}
+.jrpoas-tip-icon{display:inline-flex;align-items:center;justify-content:center;width:1rem;height:1rem;border-radius:9999px;background:#1f2937;color:#9ca3af;font-size:.65rem;cursor:help;line-height:1;user-select:none}
+.jrpoas-tip-body{visibility:hidden;opacity:0;transition:opacity .15s;position:absolute;bottom:140%;left:50%;transform:translateX(-50%);background:#111827;color:#e5e7eb;padding:.65rem .8rem;border:1px solid #374151;border-radius:.5rem;font-size:.75rem;line-height:1.3;width:18rem;max-width:80vw;z-index:50;box-shadow:0 10px 15px -3px rgba(0,0,0,.3);font-weight:400;text-align:left;pointer-events:none}
+.jrpoas-tip:hover .jrpoas-tip-body,.jrpoas-tip:focus-within .jrpoas-tip-body{visibility:visible;opacity:1}
+.jrpoas-pro[hidden]{display:none!important}
+.jrpoas-pro-title{font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#9ca3af;margin:0 0 1rem 0}
+.jrpoas-pro>*+*{margin-top:1.5rem}
+.jrpoas-divider{height:1px;background:#374151;margin:1.5rem 0;border:0}
+.jrpoas-results{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:640px){.jrpoas-results{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.jrpoas-results.jrpoas-results-3{grid-template-columns:repeat(3,1fr)}.jrpoas-results.jrpoas-results-4{grid-template-columns:repeat(2,1fr)}}
+.jrpoas-result{background:rgba(17,24,39,.6);border:1px solid #374151;border-radius:.75rem;padding:1.25rem;display:flex;flex-direction:column}
+.jrpoas-result-title{font-size:.8rem;color:#9ca3af;margin-bottom:.35rem}
+.jrpoas-result-value{font-size:1.75rem;font-weight:700;margin-bottom:.5rem;line-height:1.2;color:#fff}
+.jrpoas-result-value.is-positive{color:#34d399}
+.jrpoas-result-value.is-negative{color:#f87171}
+.jrpoas-result-desc{font-size:.72rem;color:#6b7280;line-height:1.4}
+.jrpoas-breakdown-wrap{margin-top:1.5rem}
+.jrpoas-breakdown-wrap[hidden]{display:none!important}
+.jrpoas-breakdown-title{font-size:1rem;font-weight:600;margin:0 0 .75rem 0;color:inherit}
+.jrpoas-breakdown{width:100%;font-size:.85rem;border:1px solid #374151;border-radius:.5rem;border-collapse:separate;border-spacing:0;overflow:hidden}
+.jrpoas-breakdown td{padding:.6rem .75rem;border-bottom:1px solid #1f2937}
+.jrpoas-breakdown tr:last-child td{border-bottom:0}
+.jrpoas-breakdown-label{color:#d1d5db}
+.jrpoas-breakdown-amount{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.jrpoas-breakdown-amount.is-positive{color:#34d399}
+.jrpoas-breakdown-amount.is-negative{color:#f87171}
+.jrpoas-breakdown-total td{background:rgba(31,41,55,.7);font-weight:700}
+.jrpoas-footer{text-align:center;margin-top:2rem;color:#6b7280;font-size:.8rem}
+.jrpoas-footer p{margin:.25rem 0}
+.jrpoas-footer a{color:#9ca3af;text-decoration:none;transition:color .15s}
+.jrpoas-footer a:hover{color:#007aff}
+</style>
+
+<div class="jrpoas-root" data-jrpoas-root data-jrpoas-mode="standard">
+	<div class="jrpoas-container">
+		<h2 class="jrpoas-title">ROAS &amp; POAS Calculator</h2>
+		<p class="jrpoas-subtitle">Bereken je winstgevendheid. Schakel tussen Eenvoudig en Geavanceerd voor de berekening die bij jou past.</p>
+
+		<div class="jrpoas-card">
+
+			<div class="jrpoas-toggle-wrap">
+				<div class="jrpoas-toggle" role="tablist" aria-label="Modus">
+					<button type="button" class="jrpoas-toggle-btn" data-jrpoas-mode-btn="standard" role="tab">Eenvoudig</button>
+					<button type="button" class="jrpoas-toggle-btn" data-jrpoas-mode-btn="pro" role="tab">Geavanceerd</button>
+				</div>
+			</div>
+
+			<div class="jrpoas-grid jrpoas-grid-4">
+				<div class="jrpoas-field">
+					<label class="jrpoas-label">Totale omzet (excl. BTW)</label>
+					<div class="jrpoas-input-wrap">
+						<span class="jrpoas-prefix">&euro;</span>
+						<input type="number" step="1" min="0" value="5000" data-jrpoas-input="revenue" class="jrpoas-input jrpoas-input-prefix" />
+					</div>
+				</div>
+				<div class="jrpoas-field">
+					<label class="jrpoas-label">Advertentie-uitgaven (excl. BTW)</label>
+					<div class="jrpoas-input-wrap">
+						<span class="jrpoas-prefix">&euro;</span>
+						<input type="number" step="1" min="0" value="1000" data-jrpoas-input="adSpend" class="jrpoas-input jrpoas-input-prefix" />
+					</div>
+				</div>
+				<div class="jrpoas-field jrpoas-col-span-2">
+					<label class="jrpoas-label">Brutowinstmarge</label>
+					<div class="jrpoas-range-wrap">
+						<input type="range" min="1" max="100" value="35" data-jrpoas-input="profitMargin" class="jrpoas-range" />
+						<span class="jrpoas-range-val" data-jrpoas-val="profitMargin">35%</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="jrpoas-grid jrpoas-grid-1">
+				<div class="jrpoas-field">
+					<label class="jrpoas-label">
+						Overige variabele kosten (%)
+						<span class="jrpoas-tip">
+							<span class="jrpoas-tip-icon">?</span>
+							<span class="jrpoas-tip-body">
+								<strong>Benchmarks overige variabele kosten</strong><br />
+								Fashion: 15-25%<br />
+								Elektronica: 5-10%<br />
+								Beauty &amp; Cosmetics: 7-12%<br />
+								Home &amp; Garden: 12-18%<br />
+								Supplementen / Food: 5-10%<br /><br />
+								Denk aan: pick &amp; pack, verpakkingsmateriaal, fulfilment-fees. Berekend over bruto omzet.
+							</span>
+						</span>
+					</label>
+					<div class="jrpoas-input-wrap">
+						<input type="number" step="0.1" min="0" value="10" data-jrpoas-input="otherCosts" class="jrpoas-input jrpoas-input-suffix" />
+						<span class="jrpoas-suffix">%</span>
+					</div>
+				</div>
+			</div>
+
+			<div data-jrpoas-pro class="jrpoas-pro" hidden>
+				<div class="jrpoas-divider"></div>
+				<h3 class="jrpoas-pro-title">Geavanceerde parameters</h3>
+
+				<div class="jrpoas-grid jrpoas-grid-4">
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">AOV (excl. BTW)</label>
+						<div class="jrpoas-input-wrap">
+							<span class="jrpoas-prefix">&euro;</span>
+							<input type="number" step="1" min="0" value="75" data-jrpoas-input="aov" class="jrpoas-input jrpoas-input-prefix" />
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">Verzendkosten heen (per order)</label>
+						<div class="jrpoas-input-wrap">
+							<span class="jrpoas-prefix">&euro;</span>
+							<input type="number" step="0.05" min="0" value="6.95" data-jrpoas-input="fixedShipping" class="jrpoas-input jrpoas-input-prefix" />
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">
+							Retourverzendkosten
+							<span class="jrpoas-tip">
+								<span class="jrpoas-tip-icon">?</span>
+								<span class="jrpoas-tip-body">
+									Kosten per retour die jij betaalt (retourlabel). Vaak &euro;3,50-6,00 in NL. Zet op 0 als de klant zelf retourkosten draagt.
+								</span>
+							</span>
+						</label>
+						<div class="jrpoas-input-wrap">
+							<span class="jrpoas-prefix">&euro;</span>
+							<input type="number" step="0.05" min="0" value="4.00" data-jrpoas-input="returnShipping" class="jrpoas-input jrpoas-input-prefix" />
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">Bureaukosten (excl. BTW)</label>
+						<div class="jrpoas-input-wrap">
+							<span class="jrpoas-prefix">&euro;</span>
+							<input type="number" step="1" min="0" value="0" data-jrpoas-input="agencyCosts" class="jrpoas-input jrpoas-input-prefix" />
+						</div>
+					</div>
+				</div>
+
+				<div class="jrpoas-grid jrpoas-grid-3">
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">
+							Transactiekosten (%)
+							<span class="jrpoas-tip">
+								<span class="jrpoas-tip-icon">?</span>
+								<span class="jrpoas-tip-body">
+									Procentueel deel van de PSP-fee (Mollie, Stripe, Adyen). Berekend over bruto omzet, want PSPs refunden de fee meestal niet.
+								</span>
+							</span>
+						</label>
+						<div class="jrpoas-input-wrap">
+							<input type="number" step="0.01" min="0" value="2.5" data-jrpoas-input="transactionPct" class="jrpoas-input jrpoas-input-suffix" />
+							<span class="jrpoas-suffix">%</span>
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">
+							Transactiekosten (vast)
+							<span class="jrpoas-tip">
+								<span class="jrpoas-tip-icon">?</span>
+								<span class="jrpoas-tip-body">
+									Vast bedrag per transactie. Typisch &euro;0,25 (Mollie iDEAL) tot &euro;0,30 (Stripe CC). Bij lage AOV is dit dominant.
+								</span>
+							</span>
+						</label>
+						<div class="jrpoas-input-wrap">
+							<span class="jrpoas-prefix">&euro;</span>
+							<input type="number" step="0.01" min="0" value="0.25" data-jrpoas-input="transactionFixed" class="jrpoas-input jrpoas-input-prefix" />
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">
+							Herverkoopbaar na retour
+							<span class="jrpoas-tip">
+								<span class="jrpoas-tip-icon">?</span>
+								<span class="jrpoas-tip-body">
+									Percentage van geretourneerde producten dat opnieuw verkocht kan worden. Fashion: 80-90%. Elektronica (open box): 50-70%. Supplementen: 0%. 100% = perfect herverkoopbaar.
+								</span>
+							</span>
+						</label>
+						<div class="jrpoas-range-wrap">
+							<input type="range" min="0" max="100" value="85" data-jrpoas-input="restockRate" class="jrpoas-range" />
+							<span class="jrpoas-range-val" data-jrpoas-val="restockRate">85%</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="jrpoas-grid jrpoas-grid-2">
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">Retourpercentage</label>
+						<div class="jrpoas-range-wrap">
+							<input type="range" min="0" max="100" value="15" data-jrpoas-input="returnPercentage" class="jrpoas-range" />
+							<span class="jrpoas-range-val" data-jrpoas-val="returnPercentage">15%</span>
+						</div>
+					</div>
+					<div class="jrpoas-field">
+						<label class="jrpoas-label">
+							LTV Multiplier
+							<span class="jrpoas-tip">
+								<span class="jrpoas-tip-icon">?</span>
+								<span class="jrpoas-tip-body">
+									Hoe vaak een klant terugkeert ten opzichte van de eerste aankoop. 1,5x betekent dat een klant gemiddeld 50% extra contributiemarge oplevert in vervolgaankopen (zonder nieuwe ad spend).
+								</span>
+							</span>
+						</label>
+						<div class="jrpoas-range-wrap">
+							<input type="range" min="1" max="5" step="0.1" value="1.5" data-jrpoas-input="ltvMultiplier" class="jrpoas-range" />
+							<span class="jrpoas-range-val" data-jrpoas-val="ltvMultiplier">1.5x</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="jrpoas-divider"></div>
+
+			<div class="jrpoas-results" data-jrpoas-results></div>
+
+			<div class="jrpoas-breakdown-wrap" data-jrpoas-breakdown-wrap hidden>
+				<h3 class="jrpoas-breakdown-title">Winstopbouw</h3>
+				<table class="jrpoas-breakdown">
+					<tbody data-jrpoas-breakdown></tbody>
+				</table>
+			</div>
+
+		</div>
+
+		<footer class="jrpoas-footer">
+			<p>Gemaakt door <a href="https://jamesrobinson.nl" target="_blank" rel="noopener noreferrer">James Robinson</a></p>
+			<p>Disclaimer: de berekeningen zijn schattingen. Er kunnen geen rechten aan worden ontleend.</p>
+		</footer>
+	</div>
+</div>
+
+<script>
+(function(){
+	'use strict';
+	var fmtEUR=function(v){if(!isFinite(v))return '∞';return '€ '+Number(v).toLocaleString('nl-NL',{minimumFractionDigits:2,maximumFractionDigits:2});};
+	var num=function(el,fb){if(!el)return fb||0;var v=parseFloat(el.value);return isFinite(v)?v:(fb||0);};
+	function getInputs(root){var q=function(n){return root.querySelector('[data-jrpoas-input="'+n+'"]');};return{revenue:num(q('revenue'),0),adSpend:num(q('adSpend'),0),profitMargin:num(q('profitMargin'),0),otherCosts:num(q('otherCosts'),0),aov:num(q('aov'),0),fixedShipping:num(q('fixedShipping'),0),returnShipping:num(q('returnShipping'),0),transactionPct:num(q('transactionPct'),0),transactionFixed:num(q('transactionFixed'),0),agencyCosts:num(q('agencyCosts'),0),returnPercentage:num(q('returnPercentage'),0),restockRate:num(q('restockRate'),0),ltvMultiplier:num(q('ltvMultiplier'),1)};}
+	function calcStandard(i){var em=(i.profitMargin/100)-(i.otherCosts/100);var np=(i.revenue*em)-i.adSpend;var be=em>0?(1/em).toFixed(2):'Marge te laag';return{netProfit:np,breakEven:be,breakdown:null};}
+	function calcPro(i){
+		if(i.aov<=0)return{netProfit:0,breakEven:'AOV > 0',breakdown:null};
+		var nOrders=i.revenue/i.aov;
+		var returnedRevenue=i.revenue*(i.returnPercentage/100);
+		var nReturns=nOrders*(i.returnPercentage/100);
+		var revenueKept=i.revenue-returnedRevenue;
+		var mf=i.profitMargin/100;
+		var fullCogs=i.revenue*(1-mf);
+		var returnedCogs=returnedRevenue*(1-mf);
+		var restockRecovery=returnedCogs*(i.restockRate/100);
+		var netCogs=fullCogs-restockRecovery;
+		var shippingOut=nOrders*i.fixedShipping;
+		var shippingReturn=nReturns*i.returnShipping;
+		var transactionPct=i.revenue*(i.transactionPct/100);
+		var transactionFixed=nOrders*i.transactionFixed;
+		var otherVar=i.revenue*(i.otherCosts/100);
+		var grossProfit=revenueKept-netCogs;
+		var varTotal=shippingOut+shippingReturn+transactionPct+transactionFixed+otherVar;
+		var netProfit=grossProfit-varTotal-i.adSpend-i.agencyCosts;
+		var beAd=grossProfit-varTotal-i.agencyCosts;
+		var be=(beAd>0&&i.revenue>0)?(i.revenue/beAd).toFixed(2):'N/A';
+		var bd={'Omzet na retouren':revenueKept,'Inkoopkosten (netto)':-netCogs,'Verzendkosten heen':-shippingOut,'Retourverzendkosten':-shippingReturn,'Transactiekosten (%)':-transactionPct,'Transactiekosten (vast)':-transactionFixed,'Overige variabele kosten':-otherVar,'Advertentie-uitgaven':-i.adSpend,'Bureaukosten':-i.agencyCosts};
+		return{netProfit:netProfit,breakEven:be,breakdown:bd};
+	}
+	function calcLtv(mode,i,res){if(mode==='pro'){var c=res.netProfit+i.adSpend+i.agencyCosts;return(c*i.ltvMultiplier)-i.adSpend-i.agencyCosts;}var cs=res.netProfit+i.adSpend;return(cs*i.ltvMultiplier)-i.adSpend;}
+	function cardHtml(title,value,desc,vc){return '<div class="jrpoas-result"><div class="jrpoas-result-title">'+title+'</div><div class="jrpoas-result-value '+(vc||'')+'">'+value+'</div><div class="jrpoas-result-desc">'+desc+'</div></div>';}
+	function render(root){
+		var mode=root.getAttribute('data-jrpoas-mode')||'standard';
+		var i=getInputs(root);
+		var setVal=function(n,t){var el=root.querySelector('[data-jrpoas-val="'+n+'"]');if(el)el.textContent=t;};
+		setVal('profitMargin',i.profitMargin+'%');
+		setVal('returnPercentage',i.returnPercentage+'%');
+		setVal('restockRate',i.restockRate+'%');
+		setVal('ltvMultiplier',i.ltvMultiplier.toFixed(1)+'x');
+		var res=mode==='pro'?calcPro(i):calcStandard(i);
+		var poas=i.adSpend>0?(res.netProfit/i.adSpend).toFixed(2):'∞';
+		var ltv=calcLtv(mode,i,res);
+		var pc=res.netProfit>=0?'is-positive':'is-negative';
+		var lc=ltv>=0?'is-positive':'is-negative';
+		var html='';
+		html+=cardHtml('Break-Even ROAS',res.breakEven,'Minimale ROAS nodig om quitte te spelen bij deze omzet en kosten.');
+		html+=cardHtml('Netto POAS',poas,'Winst per advertentie-euro na alle kosten. Boven 0 is winstgevend.');
+		html+=cardHtml('Winst na ads',fmtEUR(res.netProfit),'Absolute winst na aftrek van alle kosten en advertenties.',pc);
+		if(mode==='pro')html+=cardHtml('LTV winst',fmtEUR(ltv),'Totale winst over de klantlevensduur, inclusief herhaalaankopen zonder nieuwe ad spend.',lc);
+		var results=root.querySelector('[data-jrpoas-results]');
+		if(results){results.innerHTML=html;results.classList.remove('jrpoas-results-3','jrpoas-results-4');results.classList.add(mode==='pro'?'jrpoas-results-4':'jrpoas-results-3');}
+		var bw=root.querySelector('[data-jrpoas-breakdown-wrap]');
+		var bb=root.querySelector('[data-jrpoas-breakdown]');
+		if(mode==='pro'&&res.breakdown&&bw&&bb){
+			var rows='';
+			for(var k in res.breakdown){if(!Object.prototype.hasOwnProperty.call(res.breakdown,k))continue;var v=res.breakdown[k];if(v===0)continue;var cls=v<0?'is-negative':'is-positive';rows+='<tr><td class="jrpoas-breakdown-label">'+k+'</td><td class="jrpoas-breakdown-amount '+cls+'">'+fmtEUR(v)+'</td></tr>';}
+			rows+='<tr class="jrpoas-breakdown-total"><td>Netto winst</td><td class="jrpoas-breakdown-amount '+pc+'">'+fmtEUR(res.netProfit)+'</td></tr>';
+			bb.innerHTML=rows;bw.removeAttribute('hidden');
+		}else if(bw){bw.setAttribute('hidden','');}
+	}
+	function setMode(root,mode){
+		root.setAttribute('data-jrpoas-mode',mode);
+		var btns=root.querySelectorAll('[data-jrpoas-mode-btn]');
+		for(var b=0;b<btns.length;b++){var a=btns[b].getAttribute('data-jrpoas-mode-btn')===mode;btns[b].classList.toggle('is-active',a);btns[b].setAttribute('aria-selected',a?'true':'false');}
+		var pro=root.querySelector('[data-jrpoas-pro]');
+		if(pro){if(mode==='pro')pro.removeAttribute('hidden');else pro.setAttribute('hidden','');}
+		render(root);
+	}
+	function initRoot(root){
+		if(root.__jrpoasInited)return;root.__jrpoasInited=true;
+		var inputs=root.querySelectorAll('[data-jrpoas-input]');
+		for(var n=0;n<inputs.length;n++)inputs[n].addEventListener('input',function(){render(root);});
+		var btns=root.querySelectorAll('[data-jrpoas-mode-btn]');
+		for(var b=0;b<btns.length;b++){(function(btn){btn.addEventListener('click',function(){setMode(root,btn.getAttribute('data-jrpoas-mode-btn'));});})(btns[b]);}
+		setMode(root,root.getAttribute('data-jrpoas-mode')||'standard');
+	}
+	function initAll(){var rs=document.querySelectorAll('[data-jrpoas-root]');for(var r=0;r<rs.length;r++)initRoot(rs[r]);}
+	if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initAll);else initAll();
+})();
+</script>
