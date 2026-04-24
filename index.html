@@ -89,9 +89,20 @@
 .jrpoas-root .jrpoas-range-val{color:#007aff!important;background:rgba(55,65,81,.5)!important}
 .jrpoas-root .jrpoas-toggle-btn{background:transparent!important;color:#9ca3af!important;border:0!important;box-shadow:none!important}
 .jrpoas-root .jrpoas-toggle-btn.is-active{background:#007aff!important;color:#fff!important}
-.jrpoas-root .jrpoas-footer,.jrpoas-root .jrpoas-footer *{color:#6b7280!important;background:transparent!important}
-.jrpoas-root .jrpoas-footer a{color:#9ca3af!important}
-.jrpoas-root .jrpoas-footer a:hover{color:#007aff!important}
+.jrpoas-root .jrpoas-footer,.jrpoas-root .jrpoas-footer *{color:#007aff!important;background:transparent!important}
+.jrpoas-root .jrpoas-footer a{color:#007aff!important;text-decoration:underline!important;font-weight:500!important}
+.jrpoas-root .jrpoas-footer a:hover{color:#0056b3!important}
+/* v1.0.3: currency-symbool fix (thema kan line-through op spans zetten) */
+.jrpoas-root .jrpoas-prefix,.jrpoas-root .jrpoas-suffix{font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;text-decoration:none!important;font-style:normal!important;font-weight:400!important}
+.jrpoas-root .jrpoas-input{text-decoration:none!important;font-style:normal!important}
+/* v1.0.3: custom slider styling — blauwe fill tot thumb, donkergrijze rail */
+.jrpoas-root .jrpoas-range{-webkit-appearance:none!important;appearance:none!important;background:transparent!important;padding:0!important;height:20px!important;cursor:pointer!important;accent-color:#007aff!important}
+.jrpoas-root .jrpoas-range:focus{outline:0!important}
+.jrpoas-root .jrpoas-range::-webkit-slider-runnable-track{background:linear-gradient(to right,#007aff 0%,#007aff var(--jrpoas-fill,50%),rgba(55,65,81,.6) var(--jrpoas-fill,50%),rgba(55,65,81,.6) 100%)!important;height:6px;border-radius:999px;border:0}
+.jrpoas-root .jrpoas-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;background:#fff;border:2px solid #007aff;border-radius:50%;cursor:pointer;margin-top:-6px;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.jrpoas-root .jrpoas-range::-moz-range-track{background:rgba(55,65,81,.6)!important;height:6px;border-radius:999px;border:0}
+.jrpoas-root .jrpoas-range::-moz-range-progress{background:#007aff!important;height:6px;border-radius:999px;border:0}
+.jrpoas-root .jrpoas-range::-moz-range-thumb{width:18px;height:18px;background:#fff;border:2px solid #007aff;border-radius:50%;cursor:pointer;box-shadow:0 2px 4px rgba(0,0,0,.25)}
 </style>
 
 <div class="jrpoas-root" data-jrpoas-root data-jrpoas-mode="standard">
@@ -326,6 +337,7 @@
 	}
 	function calcLtv(mode,i,res){if(mode==='pro'){var c=res.netProfit+i.adSpend+i.agencyCosts;return(c*i.ltvMultiplier)-i.adSpend-i.agencyCosts;}var cs=res.netProfit+i.adSpend;return(cs*i.ltvMultiplier)-i.adSpend;}
 	function cardHtml(title,value,desc,vc){return '<div class="jrpoas-result"><div class="jrpoas-result-title">'+title+'</div><div class="jrpoas-result-value '+(vc||'')+'">'+value+'</div><div class="jrpoas-result-desc">'+desc+'</div></div>';}
+	function updateRangeFill(el){var mn=parseFloat(el.min)||0,mx=parseFloat(el.max)||100,v=parseFloat(el.value)||0;if(mx<=mn)return;el.style.setProperty('--jrpoas-fill',(((v-mn)/(mx-mn))*100)+'%');}
 	function render(root){
 		var mode=root.getAttribute('data-jrpoas-mode')||'standard';
 		var i=getInputs(root);
@@ -334,6 +346,8 @@
 		setVal('returnPercentage',i.returnPercentage+'%');
 		setVal('restockRate',i.restockRate+'%');
 		setVal('ltvMultiplier',i.ltvMultiplier.toFixed(1)+'x');
+		var ranges=root.querySelectorAll('.jrpoas-range');
+		for(var rr=0;rr<ranges.length;rr++)updateRangeFill(ranges[rr]);
 		var res=mode==='pro'?calcPro(i):calcStandard(i);
 		var poas=i.adSpend>0?(res.netProfit/i.adSpend).toFixed(2):'∞';
 		var ltv=calcLtv(mode,i,res);
